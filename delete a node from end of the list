@@ -1,0 +1,91 @@
+#include <iostream>
+using namespace std;
+
+// Node structure
+struct Node {
+    int data;
+    Node* next;
+};
+
+// Insert node at end (for testing)
+void insertEnd(Node*& head, int value) {
+    Node* newNode = new Node();
+    newNode->data = value;
+    newNode->next = nullptr;
+
+    if (head == nullptr) {
+        head = newNode;
+    } else {
+        Node* temp = head;
+        while (temp->next != nullptr) {
+            temp = temp->next;
+        }
+        temp->next = newNode;
+    }
+}
+
+// Delete node at end
+void deleteEnd(Node*& head) {
+    if (head == nullptr) {
+        cout << "List is empty, nothing to delete!" << endl;
+        return;
+    }
+
+    // If only one node
+    if (head->next == nullptr) {
+        cout << "Deleted: " << head->data << endl;
+        delete head;
+        head = nullptr;
+        return;
+    }
+
+    // Traverse to the second-last node
+    Node* temp = head;
+    while (temp->next->next != nullptr) {
+        temp = temp->next;
+    }
+
+    cout << "Deleted: " << temp->next->data << endl;
+    delete temp->next;
+    temp->next = nullptr;
+}
+
+// Display linked list
+void display(Node* head) {
+    if (head == nullptr) {
+        cout << "List is empty!" << endl;
+        return;
+    }
+
+    cout << "Linked List: ";
+    while (head != nullptr) {
+        cout << head->data << " -> ";
+        head = head->next;
+    }
+    cout << "NULL" << endl;
+}
+
+int main() {
+    Node* head = nullptr;
+
+    // Insert nodes
+    insertEnd(head, 10);
+    insertEnd(head, 20);
+    insertEnd(head, 30);
+
+    display(head);
+
+    // Delete from end
+    deleteEnd(head);
+    display(head);
+
+    deleteEnd(head);
+    display(head);
+
+    deleteEnd(head);
+    display(head);
+
+    deleteEnd(head); // Attempt on empty list
+
+    return 0;
+}
