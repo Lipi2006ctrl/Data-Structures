@@ -1,0 +1,101 @@
+#include <iostream>
+using namespace std;
+
+// Node structure
+struct Node {
+    int data;
+    Node* next;
+};
+
+// Insert node at end (for testing)
+void insertEnd(Node*& head, int value) {
+    Node* newNode = new Node();
+    newNode->data = value;
+    newNode->next = nullptr;
+
+    if (head == nullptr) {
+        head = newNode;
+    } else {
+        Node* temp = head;
+        while (temp->next != nullptr) {
+            temp = temp->next;
+        }
+        temp->next = newNode;
+    }
+}
+
+// Delete node at nth position
+void deleteAtPos(Node*& head, int n) {
+    if (head == nullptr) {
+        cout << "List is empty, nothing to delete!" << endl;
+        return;
+    }
+
+    // Delete head node
+    if (n == 1) {
+        Node* temp = head;
+        head = head->next;
+        cout << "Deleted: " << temp->data << endl;
+        delete temp;
+        return;
+    }
+
+    Node* temp = head;
+    for (int i = 1; temp != nullptr && i < n - 1; i++) {
+        temp = temp->next;
+    }
+
+    // If position is invalid
+    if (temp == nullptr || temp->next == nullptr) {
+        cout << "Position out of range!" << endl;
+        return;
+    }
+
+    Node* nodeToDelete = temp->next;
+    temp->next = nodeToDelete->next;
+    cout << "Deleted: " << nodeToDelete->data << endl;
+    delete nodeToDelete;
+}
+
+// Display linked list
+void display(Node* head) {
+    if (head == nullptr) {
+        cout << "List is empty!" << endl;
+        return;
+    }
+
+    cout << "Linked List: ";
+    while (head != nullptr) {
+        cout << head->data << " -> ";
+        head = head->next;
+    }
+    cout << "NULL" << endl;
+}
+
+int main() {
+    Node* head = nullptr;
+
+    // Insert some nodes
+    insertEnd(head, 10);
+    insertEnd(head, 20);
+    insertEnd(head, 30);
+    insertEnd(head, 40);
+    insertEnd(head, 50);
+
+    display(head);
+
+    // Delete at positions
+    deleteAtPos(head, 1); // Delete first
+    display(head);
+
+    deleteAtPos(head, 3); // Delete middle (position 3)
+    display(head);
+
+    deleteAtPos(head, 10); // Invalid position
+    display(head);
+
+    deleteAtPos(head, 2); // Delete another node
+    display(head);
+
+    return 0;
+}
