@@ -1,0 +1,60 @@
+#include <iostream>
+using namespace std;
+
+// Node structure
+struct Node {
+    int data;
+    Node* next;
+};
+
+// Insert node at nth position
+void insertAtNth(Node*& head, int value, int n) {
+    Node* newNode = new Node();
+    newNode->data = value;
+    newNode->next = nullptr;
+
+    // If inserting at head (position 1)
+    if (n == 1) {
+        newNode->next = head;
+        head = newNode;
+        return;
+    }
+
+    Node* temp = head;
+    for (int i = 1; i < n - 1 && temp != nullptr; i++) {
+        temp = temp->next;
+    }
+
+    if (temp == nullptr) {
+        cout << "Position out of range!" << endl;
+        delete newNode;
+        return;
+    }
+
+    newNode->next = temp->next;
+    temp->next = newNode;
+}
+
+// Display linked list
+void display(Node* head) {
+    cout << "Linked List: ";
+    while (head != nullptr) {
+        cout << head->data << " -> ";
+        head = head->next;
+    }
+    cout << "NULL" << endl;
+}
+
+int main() {
+    Node* head = nullptr;
+
+    insertAtNth(head, 10, 1); // 10
+    insertAtNth(head, 20, 2); // 10 -> 20
+    insertAtNth(head, 30, 3); // 10 -> 20 -> 30
+    insertAtNth(head, 15, 2); // 10 -> 15 -> 20 -> 30
+    insertAtNth(head, 5, 1);  // 5 -> 10 -> 15 -> 20 -> 30
+
+    display(head);
+
+    return 0;
+}
