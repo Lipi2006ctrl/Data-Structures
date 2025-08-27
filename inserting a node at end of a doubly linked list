@@ -1,0 +1,57 @@
+#include <iostream>
+using namespace std;
+
+// Node structure for Doubly Linked List
+struct Node {
+    int data;
+    Node* prev;
+    Node* next;
+};
+
+// Function to insert a node at the end
+void insertAtEnd(Node** head, int value) {
+    // Step 1: Create new node
+    Node* newNode = new Node();
+    newNode->data = value;
+    newNode->next = nullptr;
+
+    // If list is empty, new node becomes head
+    if (*head == nullptr) {
+        newNode->prev = nullptr;
+        *head = newNode;
+        return;
+    }
+
+    // Step 2: Traverse to the last node
+    Node* temp = *head;
+    while (temp->next != nullptr) {
+        temp = temp->next;
+    }
+
+    // Step 3: Update pointers
+    temp->next = newNode;
+    newNode->prev = temp;
+}
+
+// Function to display the list
+void display(Node* head) {
+    Node* temp = head;
+    cout << "Doubly Linked List: ";
+    while (temp != nullptr) {
+        cout << temp->data << " ";
+        temp = temp->next;
+    }
+    cout << endl;
+}
+
+int main() {
+    Node* head = nullptr; // Empty list initially
+
+    insertAtEnd(&head, 10);
+    insertAtEnd(&head, 20);
+    insertAtEnd(&head, 30);
+
+    display(head);
+
+    return 0;
+}
