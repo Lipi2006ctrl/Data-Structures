@@ -1,0 +1,97 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* prev;
+    Node* next;
+};
+
+// Function to delete node at a given position
+void deleteAtPosition(Node*& head, int pos) {
+    if (head == nullptr) {
+        cout << "List is empty!" << endl;
+        return;
+    }
+
+    Node* temp = head;
+
+    // Case 1: Delete the first node
+    if (pos == 1) {
+        head = temp->next;
+        if (head != nullptr)
+            head->prev = nullptr;
+        delete temp;
+        return;
+    }
+
+    // Traverse to the given position
+    for (int i = 1; temp != nullptr && i < pos; i++) {
+        temp = temp->next;
+    }
+
+    // If position is invalid
+    if (temp == nullptr) {
+        cout << "Position out of range!" << endl;
+        return;
+    }
+
+    // Change links
+    if (temp->next != nullptr)
+        temp->next->prev = temp->prev;
+
+    if (temp->prev != nullptr)
+        temp->prev->next = temp->next;
+
+    delete temp;
+}
+
+// Function to insert at end (for testing)
+void insertEnd(Node*& head, int data) {
+    Node* newNode = new Node{data, nullptr, nullptr};
+    if (head == nullptr) {
+        head = newNode;
+        return;
+    }
+    Node* temp = head;
+    while (temp->next != nullptr) {
+        temp = temp->next;
+    }
+    temp->next = newNode;
+    newNode->prev = temp;
+}
+
+// Display the list
+void display(Node* head) {
+    Node* temp = head;
+    while (temp != nullptr) {
+        cout << temp->data << " <-> ";
+        temp = temp->next;
+    }
+    cout << "NULL" << endl;
+}
+
+int main() {
+    Node* head = nullptr;
+
+    // Inserting elements
+    insertEnd(head, 10);
+    insertEnd(head, 20);
+    insertEnd(head, 30);
+    insertEnd(head, 40);
+    insertEnd(head, 50);
+
+    cout << "Original list: ";
+    display(head);
+
+    int pos;
+    cout << "Enter position to delete: ";
+    cin >> pos;
+
+    deleteAtPosition(head, pos);
+
+    cout << "After deletion: ";
+    display(head);
+
+    return 0;
+}
