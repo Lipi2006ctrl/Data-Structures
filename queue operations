@@ -1,0 +1,73 @@
+#include <iostream>
+using namespace std;
+
+#define SIZE 5   // Maximum size of queue
+
+class Queue {
+    int arr[SIZE];
+    int front, rear;
+
+public:
+    Queue() {
+        front = -1;
+        rear = -1;
+    }
+
+    // Insert element
+    void enqueue(int value) {
+        if (rear == SIZE - 1) {
+            cout << "Queue Overflow (full)\n";
+        } else {
+            if (front == -1) front = 0; // First element
+            arr[++rear] = value;
+            cout << value << " inserted into queue\n";
+        }
+    }
+
+    // Delete element
+    void dequeue() {
+        if (front == -1 || front > rear) {
+            cout << "Queue Underflow (empty)\n";
+        } else {
+            cout << arr[front] << " removed from queue\n";
+            front++;
+        }
+    }
+
+    // Get front element
+    void peek() {
+        if (front == -1 || front > rear) {
+            cout << "Queue is empty\n";
+        } else {
+            cout << "Front element is: " << arr[front] << endl;
+        }
+    }
+
+    // Display queue elements
+    void display() {
+        if (front == -1 || front > rear) {
+            cout << "Queue is empty\n";
+        } else {
+            cout << "Queue elements: ";
+            for (int i = front; i <= rear; i++) {
+                cout << arr[i] << " ";
+            }
+            cout << endl;
+        }
+    }
+};
+
+// Main function
+int main() {
+    Queue q;
+    q.enqueue(10);
+    q.enqueue(20);
+    q.enqueue(30);
+    q.display();
+    q.peek();
+    q.dequeue();
+    q.display();
+    q.peek();
+
+    return 0;
+}
