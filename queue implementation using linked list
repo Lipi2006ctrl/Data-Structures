@@ -1,0 +1,90 @@
+#include <iostream>
+using namespace std;
+
+// Node structure
+struct Node {
+    int data;
+    Node* next;
+};
+
+class Queue {
+private:
+    Node* front;  // points to front element
+    Node* rear;   // points to rear element
+
+public:
+    Queue() {
+        front = rear = nullptr;
+    }
+
+    // Enqueue operation
+    void enqueue(int value) {
+        Node* newNode = new Node();
+        newNode->data = value;
+        newNode->next = nullptr;
+
+        if (rear == nullptr) {  // empty queue
+            front = rear = newNode;
+        } else {
+            rear->next = newNode;
+            rear = newNode;
+        }
+        cout << "Enqueued: " << value << endl;
+    }
+
+    // Dequeue operation
+    void dequeue() {
+        if (front == nullptr) {
+            cout << "Queue Underflow!" << endl;
+            return;
+        }
+        Node* temp = front;
+        cout << "Dequeued: " << temp->data << endl;
+        front = front->next;
+
+        if (front == nullptr) {  // queue became empty
+            rear = nullptr;
+        }
+        delete temp;
+    }
+
+    // Peek (front element)
+    void peek() {
+        if (front == nullptr) {
+            cout << "Queue is empty!" << endl;
+        } else {
+            cout << "Front element: " << front->data << endl;
+        }
+    }
+
+    // Display queue
+    void display() {
+        if (front == nullptr) {
+            cout << "Queue is empty!" << endl;
+        } else {
+            cout << "Queue elements: ";
+            Node* temp = front;
+            while (temp != nullptr) {
+                cout << temp->data << " ";
+                temp = temp->next;
+            }
+            cout << endl;
+        }
+    }
+};
+
+int main() {
+    Queue q;
+
+    q.enqueue(10);
+    q.enqueue(20);
+    q.enqueue(30);
+
+    q.display();
+    q.peek();
+
+    q.dequeue();
+    q.display();
+
+    return 0;
+}
