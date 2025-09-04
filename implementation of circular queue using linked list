@@ -1,0 +1,96 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+};
+
+class CircularQueue {
+private:
+    Node* front;
+    Node* rear;
+
+public:
+    CircularQueue() {
+        front = rear = nullptr;
+    }
+
+    bool isEmpty() {
+        return (front == nullptr);
+    }
+    void enqueue(int value) {
+        Node* newNode = new Node();
+        newNode->data = value;
+        newNode->next = nullptr;
+
+        if (isEmpty()) {
+            front = rear = newNode;
+            rear->next = front; 
+        } else {
+            rear->next = newNode;
+            rear = newNode;
+            rear->next = front; 
+        }
+        cout << "Inserted " << value << endl;
+    }
+
+    void dequeue() {
+        if (isEmpty()) {
+            cout << "Queue is Empty!" << endl;
+            return;
+        }
+
+        int value;
+        if (front == rear) { 
+            value = front->data;
+            delete front;
+            front = rear = nullptr;
+        } else {
+            Node* temp = front;
+            value = temp->data;
+            front = front->next;
+            rear->next = front; 
+            delete temp;
+        }
+        cout << "Deleted " << value << endl;
+    }
+
+  
+    void display() {
+        if (isEmpty()) {
+            cout << "Queue is Empty!" << endl;
+            return;
+        }
+        cout << "Queue elements are: ";
+        Node* temp = front;
+        do {
+            cout << temp->data << " ";
+            temp = temp->next;
+        } while (temp != front);
+        cout << endl;
+    }
+};
+
+int main() {
+    CircularQueue q;
+
+    q.enqueue(10);
+    q.enqueue(20);
+    q.enqueue(30);
+    q.enqueue(40);
+
+    q.display();
+
+    q.dequeue();
+    q.dequeue();
+
+    q.display();
+
+    q.enqueue(50);
+    q.enqueue(60);
+
+    q.display();
+
+    return 0;
+}
