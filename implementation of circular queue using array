@@ -1,0 +1,109 @@
+#include <iostream>
+using namespace std;
+
+#define SIZE 5   
+
+class CircularQueue {
+private:
+    int arr[SIZE];
+    int front, rear;
+
+public:
+    CircularQueue() {
+        front = -1;
+        rear = -1;
+    }
+
+    
+    bool isFull() {
+        return ((front == 0 && rear == SIZE - 1) || (rear == (front - 1) % (SIZE - 1)));
+    }
+
+    
+    bool isEmpty() {
+        return (front == -1);
+    }
+
+  
+    void enqueue(int value) {
+        if (isFull()) {
+            cout << "Queue is Full!" << endl;
+            return;
+        }
+        if (front == -1) {
+            front = rear = 0;
+        }
+        else if (rear == SIZE - 1 && front != 0) {
+            rear = 0;   
+        }
+        else {
+            rear++;
+        }
+        arr[rear] = value;
+        cout << "Inserted " << value << endl;
+    }
+
+  
+    void dequeue() {
+        if (isEmpty()) {
+            cout << "Queue is Empty!" << endl;
+            return;
+        }
+        int data = arr[front];
+        cout << "Deleted " << data << endl;
+
+        if (front == rear) {  
+            front = rear = -1;
+        }
+        else if (front == SIZE - 1) {
+            front = 0; 
+        }
+        else {
+            front++;
+        }
+    }
+
+  
+    void display() {
+        if (isEmpty()) {
+            cout << "Queue is Empty!" << endl;
+            return;
+        }
+        cout << "Queue elements are: ";
+        if (rear >= front) {
+            for (int i = front; i <= rear; i++)
+                cout << arr[i] << " ";
+        }
+        else {
+            for (int i = front; i < SIZE; i++)
+                cout << arr[i] << " ";
+            for (int i = 0; i <= rear; i++)
+                cout << arr[i] << " ";
+        }
+        cout << endl;
+    }
+};
+
+int main() {
+    CircularQueue q;
+
+    q.enqueue(10);
+    q.enqueue(20);
+    q.enqueue(30);
+    q.enqueue(40);
+    q.enqueue(50); 
+
+    q.display();
+
+    q.dequeue();
+    q.dequeue();
+
+    q.display();
+
+    q.enqueue(60);
+    q.enqueue(70);
+
+    q.display();
+
+    return 0;
+}
