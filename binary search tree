@@ -1,0 +1,156 @@
+#include <iostream>
+using namespace std;
+
+// Define a node
+struct Node {
+    int data;
+    Node* left;
+    Node* right;
+
+    Node(int value) {
+        data = value;
+        left = right = nullptr;
+    }
+};
+
+// BST Class
+class BST {
+public:
+    Node* root;
+
+    BST() {
+        root = nullptr;
+    }
+
+    // Insert node
+    Node* insert(Node* node, int value) {
+        if (node == nullptr) {
+            return new Node(value);
+        }
+        if (value < node->data) {
+            node->left = insert(node->left, value);
+        } else if (value > node->data) {
+            node->right = insert(node->right, value);
+        }
+        return node;
+    }
+
+    // Search node
+    bool search(Node* node, int key) {
+        if (node == nullptr) return false;
+        if (node->data == key) return true;
+        if (key < node->data)
+            return search(node->left, key);
+        else
+            return search(node->right, key);
+    }
+
+    // Find minimum node
+    Node* findMin(Node* node) {
+        while (node && node->left != nullptr) {
+            node = node->left;
+        }
+        return node;
+    }
+
+    // Delete node
+    Node* deleteNode(Node* node, int key) {
+        if (node == nullptr) return node;
+
+        if (key < node->data) {
+            node->left = deleteNode(node->left, key);
+        } 
+        else if (key > node->data) {
+            node->right = deleteNode(node->right, key);
+        } 
+        else {
+            // Case 1: No child
+            if (node->left == nullptr && node->right == nullptr) {
+                delete node;
+                return nullptr;
+            }
+            // Case 2: One child
+            else if (node->left == nullptr) {
+                Node* temp = node->right;
+                delete node;
+                return temp;
+            }
+            else if (node->right == nullptr) {
+                Node* temp = node->left;
+                delete node;
+                return temp;
+            }
+            // Case 3: Two children
+            Node* temp = findMin(node->right);
+            node->data = temp->data;
+            node->right = deleteNode(node->right, temp->data);
+        }
+        return node;
+    }
+
+    // Inorder Traversal (sorted order)
+    void inorder(Node* node) {
+        if (node != nullptr) {
+            inorder(node->left);
+            cout << node->data << " ";
+            inorder(node->right);
+        }
+    }
+
+    // Preorder Traversal
+    void preorder(Node* node) {
+        if (node != nullptr) {
+            cout << node->data << " ";
+            preorder(node->left);
+            preorder(node->right);
+        }
+    }
+
+    // Postorder Traversal
+    void postorder(Node* node) {
+        if (node != nullptr) {
+            postorder(node->left);
+            postorder(node->right);
+            cout << node->data << " ";
+        }
+    }
+};
+
+// Main function
+int main() {
+    BST tree;
+
+    // Insert elements
+    tree.root = tree.insert(tree.root, 50);
+    tree.insert(tree.root, 30);
+    tree.insert(tree.root, 70);
+    tree.insert(tree.root, 20);
+    tree.insert(tree.root, 40);
+    tree.insert(tree.root, 60);
+    tree.insert(tree.root, 80);
+
+    cout << "Inorder Traversal: ";
+    tree.inorder(tree.root);
+    cout << endl;
+
+    cout << "Preorder Traversal: ";
+    tree.preorder(tree.root);
+    cout << endl;
+
+    cout << "Postorder Traversal: ";
+    tree.postorder(tree.root);
+    cout << endl;
+
+    // Search
+    int key = 40;
+    cout << "Search " << key << ": " 
+         << (tree.search(tree.root, key) ? "Found" : "Not Found") << endl;
+
+    // Delete node
+    tree.root = tree.deleteNode(tree.root, 30);
+    cout << "Inorder after deleting 30: ";
+    tree.inorder(tree.root);
+    cout << endl;
+
+    return 0;
+}
