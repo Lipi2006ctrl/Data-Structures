@@ -1,0 +1,125 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+class MinHeap {
+    vector<int> heap;
+    int parent(int i) { return (i - 1) / 2; }
+    int left(int i) { return (2 * i + 1); }
+    int right(int i) { return (2 * i + 2); }
+
+    void heapifyUp(int i) {
+        while (i != 0 && heap[parent(i)] > heap[i]) {
+            swap(heap[i], heap[parent(i)]);
+            i = parent(i);
+        }
+    }
+
+    
+    void heapifyDown(int i) {
+        int smallest = i;
+        int l = left(i);
+        int r = right(i);
+
+        if (l < heap.size() && heap[l] < heap[smallest])
+            smallest = l;
+        if (r < heap.size() && heap[r] < heap[smallest])
+            smallest = r;
+
+        if (smallest != i) {
+            swap(heap[i], heap[smallest]);
+            heapifyDown(smallest);
+        }
+    }
+
+public:
+ 
+    void create() {
+        heap.clear();
+        cout << "Heap created successfully.\n";
+    }
+
+    void insert(int val) {
+        heap.push_back(val);
+        heapifyUp(heap.size() - 1);
+        cout << val << " inserted into heap.\n";
+    }
+
+    void deleteByValue(int val) {
+        auto it = find(heap.begin(), heap.end(), val);
+        if (it == heap.end()) {
+            cout << "Value not found in heap.\n";
+            return;
+        }
+        int index = it - heap.begin();
+        heap[index] = heap.back();
+        heap.pop_back();
+        heapifyDown(index);
+        heapifyUp(index);
+        cout << val << " deleted from heap.\n";
+    }
+
+    void extractMin() {
+        if (heap.empty()) {
+            cout << "Heap is empty.\n";
+            return;
+        }
+        int minVal = heap[0];
+        heap[0] = heap.back();
+        heap.pop_back();
+        heapifyDown(0);
+        cout << "Extracted minimum: " << minVal << endl;
+    }
+
+  
+    void display() {
+        if (heap.empty()) {
+            cout << "Heap is empty.\n";
+            return;
+        }
+        cout << "Heap elements: ";
+        for (int val : heap)
+            cout << val << " ";
+        cout << endl;
+    }
+};
+
+int main() {
+    MinHeap h;
+    int choice, val;
+
+    while (true) {
+        cout << "\n--- Min Heap Operations ---\n";
+        cout << "1. Create\n2. Insert\n3. Delete by Value\n4. Extract Min\n5. Display\n6. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+        case 1:
+            h.create();
+            break;
+        case 2:
+            cout << "Enter value to insert: ";
+            cin >> val;
+            h.insert(val);
+            break;
+        case 3:
+            cout << "Enter value to delete: ";
+            cin >> val;
+            h.deleteByValue(val);
+            break;
+        case 4:
+            h.extractMin();
+            break;
+        case 5:
+            h.display();
+            break;
+        case 6:
+            cout << "Exiting program.\n";
+            return 0;
+        default:
+            cout << "Invalid choice. Try again.\n";
+        }
+    }
+}
