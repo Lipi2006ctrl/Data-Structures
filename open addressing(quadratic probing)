@@ -1,0 +1,125 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+class HashTable {
+    vector<int> table;
+    int size;
+    const int EMPTY = -1;
+    const int DELETED = -2;
+
+public:
+    HashTable(int s) {
+        size = s;
+        table.resize(size, EMPTY);
+    }
+
+    // Hash function
+    int hash(int key) {
+        return key % size;
+    }
+
+    // Insert key using quadratic probing
+    void insert(int key) {
+        int index = hash(key);
+        int i = 0;
+        while (table[(index + i * i) % size] != EMPTY && 
+               table[(index + i * i) % size] != DELETED) {
+            i++;
+            if (i == size) {
+                cout << "Hash table is full!\n";
+                return;
+            }
+        }
+        int newIndex = (index + i * i) % size;
+        table[newIndex] = key;
+        cout << key << " inserted at index " << newIndex << endl;
+    }
+
+    // Search key
+    int search(int key) {
+        int index = hash(key);
+        int i = 0;
+        while (table[(index + i * i) % size] != EMPTY) {
+            int pos = (index + i * i) % size;
+            if (table[pos] == key)
+                return pos;
+            i++;
+            if (i == size)
+                break;
+        }
+        return -1;
+    }
+
+    // Delete key
+    void deleteKey(int key) {
+        int pos = search(key);
+        if (pos == -1)
+            cout << "Key not found.\n";
+        else {
+            table[pos] = DELETED;
+            cout << key << " deleted from index " << pos << endl;
+        }
+    }
+
+    // Display hash table
+    void display() {
+        cout << "\nHash Table:\n";
+        for (int i = 0; i < size; i++) {
+            cout << i << " -> ";
+            if (table[i] == EMPTY)
+                cout << "EMPTY";
+            else if (table[i] == DELETED)
+                cout << "DELETED";
+            else
+                cout << table[i];
+            cout << endl;
+        }
+    }
+};
+
+int main() {
+    int size, choice, key;
+    cout << "Enter size of hash table: ";
+    cin >> size;
+    HashTable ht(size);
+
+    while (true) {
+        cout << "\n--- Hash Table (Quadratic Probing) ---\n";
+        cout << "1. Insert\n2. Delete\n3. Search\n4. Display\n5. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+        case 1:
+            cout << "Enter key to insert: ";
+            cin >> key;
+            ht.insert(key);
+            break;
+        case 2:
+            cout << "Enter key to delete: ";
+            cin >> key;
+            ht.deleteKey(key);
+            break;
+        case 3:
+            cout << "Enter key to search: ";
+            cin >> key;
+            {
+                int pos = ht.search(key);
+                if (pos == -1)
+                    cout << "Key not found.\n";
+                else
+                    cout << "Key found at index " << pos << endl;
+            }
+            break;
+        case 4:
+            ht.display();
+            break;
+        case 5:
+            cout << "Exiting program.\n";
+            return 0;
+        default:
+            cout << "Invalid choice! Try again.\n";
+        }
+    }
+}
